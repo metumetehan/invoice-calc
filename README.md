@@ -1,6 +1,18 @@
 # InvoiceCalc
 
+InvoiceCalc is an Angular-based invoice calculation tool designed to automate tax and total amount computations.
+
 This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.7.
+
+## Features
+- **Automatic Tax Calculation**: Computes taxes based on the given total amount.
+- **Real-time Updates**: Instantly updates calculations as the user inputs values.
+- **Modern UI**: Styled with Tailwind CSS for a sleek and responsive design.
+- **Angular 19 Framework**: Built using the latest Angular features and best practices.
+
+
+
+
 
 ## Development server
 
