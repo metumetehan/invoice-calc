@@ -1,7 +1,8 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { Tax } from '../../models/tax.model';
 import { TaxCardComponent } from "./tax-card/tax-card.component";
 import { AmountInputComponent } from "../../components/amount-input/amount-input.component";
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-tax-list',
@@ -46,17 +47,25 @@ import { AmountInputComponent } from "../../components/amount-input/amount-input
   styles: ``
 })
 export class TaxListComponent {
+  private http = inject(HttpClient);
+
   allTaxesInclusive = signal<number>(0);
   withoutTaxes = signal<number>(0);
 
-  taxVAT = signal<Tax>({ id: 5, title: 'VAT', rate: 0.15, deducted: false });
+  taxes = signal<Tax[]>([]);
+  taxVAT = signal<Tax>({ id: 1, title: 'VAT', rate: 0.15, deducted: false });
+  //taxVAT = signal<Tax | null>(null);
+
+  /*
+  taxVAT = signal<Tax>({ id: 1, title: 'VAT', rate: 0.15, deducted: false });
 
   taxes = signal<Tax[]>([
-    { id: 1, title: 'TL Levy', rate: 0.01, deducted: true },
-    { id: 2, title: 'Get Fund Levy', rate: 0.025, deducted: false },
-    { id: 3, title: 'Covid Levy', rate: 0.01, deducted: false },
-    { id: 4, title: 'NHIL', rate: 0.025, deducted: false },
+    { id: 2, title: 'TL Levy', rate: 0.01, deducted: true },
+    { id: 3, title: 'Get Fund Levy', rate: 0.025, deducted: false },
+    { id: 4, title: 'Covid Levy', rate: 0.01, deducted: false },
+    { id: 5, title: 'NHIL', rate: 0.025, deducted: false },
   ]);
+  */
 
   pTaxRates = computed(() =>
     this.taxes().reduce((sum, tax) => tax.deducted ? sum : sum + tax.rate, 0)
@@ -66,6 +75,20 @@ export class TaxListComponent {
     this.taxes().reduce((sum, tax) => tax.deducted ? sum + tax.rate : sum, 0)
   );
 
+
+  constructor() {
+    this.http.get<Tax[]>('http://localhost:5203/api/Tax').subscribe({
+      next: (taxesList) => {
+        if (taxesList.length > 0) {
+          this.taxVAT.set(taxesList[0]); // Set VAT as first element
+          this.taxes.set(taxesList.slice(1)); // Remove VAT from the list
+        }
+      },
+      error: (error) => console.error("GET request failed:", error)
+    });
+    //console.log(this.taxVAT());
+    //console.log(this.taxes());
+  }
 
 
   updateAllTaxesInclusive(event: Event) {

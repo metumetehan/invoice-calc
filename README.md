@@ -11,7 +11,11 @@ This project was generated using [Angular CLI](https://github.com/angular/angula
 - **Angular 19 Framework**: Built using the latest Angular features and best practices.
 
 
+## Version Compatibility
+- **Angular Frontend:** v0.1.1
+- **ASP.NET Backend:** v0.1.0
 
+These versions are designed to work together. Make sure both projects are updated to avoid compatibility issues.
 
 
 ## Development server
