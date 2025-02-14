@@ -1,27 +1,23 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-amount-input',
-  imports: [],
   template: `
-    <input
-      class="w-20 h-20 text-center border border-gray-300 rounded-lg text-xl font-bold"
-      type="number"
-      [value]="amount"
-      (input)="onAmountChange($event)"
-      placeholder="0"
-    />
+    <div class="bg-white shadow-md rounded-lg p-4 my-4 flex justify-between items-center">
+      <span class="text-xl font-bold">
+        {{ label }}
+      </span>
+      <input
+        type="text"
+        class="border border-gray-300 rounded p-2 text-right w-24 font-bold"
+        [value]="value.toFixed(2)"
+        readonly
+      />
+    </div>
   `,
   styles: ``
 })
 export class AmountInputComponent {
-
-  @Input() amount: number = 0;
-  @Output() amountChange = new EventEmitter<number>();
-
-  onAmountChange(event: Event) {
-    const inputValue = (event.target as HTMLInputElement).value;
-    this.amountChange.emit(Number(inputValue));
-  }
-
+  @Input() label!: string;
+  @Input() value!: number;
 }

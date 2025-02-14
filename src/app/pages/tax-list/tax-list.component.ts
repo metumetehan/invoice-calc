@@ -1,44 +1,26 @@
-import { Component, computed, Input, Signal, signal } from '@angular/core';
+import { Component, computed, signal } from '@angular/core';
 import { Tax } from '../../models/tax.model';
 import { TaxCardComponent } from "./tax-card/tax-card.component";
+import { AmountInputComponent } from "../../components/amount-input/amount-input.component";
 
 @Component({
   selector: 'app-tax-list',
-  imports: [TaxCardComponent],
+  imports: [TaxCardComponent, AmountInputComponent],
   template: `
     <div class="flex gap-4 w-full p-4">
       <div class="flex-2 flex-col gap-4">
-        <div class="bg-white shadow-md rounded-lg my-4 p-4 flex justify-between items-center">
-          <span class="text-xl font-bold">
-            Value
-          </span>
-          <span class="text-lg font-bold">
-          </span>
-          <input
-            type="text"
-            class="border border-gray-300 rounded p-2 text-right w-24 font-bold"
-            [value]="withoutTaxes().toFixed(2)"
-            readonly
-          />
-        </div>
+
+        <app-amount-input label="Value" [value]="withoutTaxes()"></app-amount-input>
 
         @for (tax of taxes(); track tax.id) {
           <app-tax-card [tax]="tax" [calculatedValue]="tax.rate * withoutTaxes()"></app-tax-card>
         }
-        <div class="bg-white shadow-md rounded-lg p-4 my-4 flex justify-between items-center">
-          <span class="text-xl font-bold">
-            Value before VAT
-          </span>
-          <span class="text-lg font-bold">
-          </span>
-          <input
-            type="text"
-            class="border border-gray-300 rounded p-2 text-right w-24 font-bold"
-            [value]="(withoutTaxes()*(1+nTaxRates()+pTaxRates())).toFixed(2)"
-            readonly
-          />
-        </div>
+
+        <app-amount-input label="Value before VAT" [value]="withoutTaxes() * (1 + nTaxRates() + pTaxRates())"></app-amount-input>
+
+
         <app-tax-card [tax]="taxVAT()" [calculatedValue]="taxVAT().rate * withoutTaxes()* (1+pTaxRates())"></app-tax-card>
+
         <div class="bg-slate-100 p-4 my-4 flex justify-between items-center">
           <span class="text-2xl font-bold">
             All Taxes Inclusive
@@ -53,29 +35,10 @@ import { TaxCardComponent } from "./tax-card/tax-card.component";
           />
         </div>
       </div>
+
       <div class="flex-1 flex-col gap-4 mr-0 lg:mr-10">
-        <div class="bg-white shadow-md rounded-lg p-4 my-4 flex justify-between items-center">
-          <span class="text-xl font-bold">
-          Sales amount - Inclusive of all taxes and VAT
-          </span>
-          <input
-            type="text"
-            class="border border-gray-300 rounded p-2 text-right w-24 font-bold"
-            [value]="allTaxesInclusive().toFixed(2)"
-            readonly
-            />
-        </div>
-        <div class="bg-white shadow-md rounded-lg p-4 my-4 flex justify-between items-center">
-          <span class="text-xl font-bold">
-            Sales amount - Exclusive of all taxes and VAT
-          </span>
-          <input
-            type="text"
-            class="border border-gray-300 rounded p-2 text-right w-24 font-bold"
-            [value]="withoutTaxes().toFixed(2)"
-            readonly
-            />
-        </div>
+        <app-amount-input label="Sales amount - Inclusive of all taxes and VAT" [value]="allTaxesInclusive()"></app-amount-input>
+        <app-amount-input label="Sales amount - Exclusive of all taxes and VAT" [value]="withoutTaxes()"></app-amount-input>
       </div>
 
     </div>
