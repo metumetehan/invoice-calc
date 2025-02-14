@@ -3,10 +3,11 @@ import { Tax } from '../../models/tax.model';
 import { TaxCardComponent } from "./tax-card/tax-card.component";
 import { AmountInputComponent } from "../../components/amount-input/amount-input.component";
 import { HttpClient } from '@angular/common/http';
+import { DateLocationInputComponent } from "../../components/date-location-input/date-location-input.component";
 
 @Component({
   selector: 'app-tax-list',
-  imports: [TaxCardComponent, AmountInputComponent],
+  imports: [TaxCardComponent, AmountInputComponent, DateLocationInputComponent],
   template: `
     <div class="flex gap-4 w-full p-4">
       <div class="flex-2 flex-col gap-4">
@@ -40,6 +41,7 @@ import { HttpClient } from '@angular/common/http';
       <div class="flex-1 flex-col gap-4 mr-0 lg:mr-10">
         <app-amount-input label="Sales amount - Inclusive of all taxes and VAT" [value]="allTaxesInclusive()"></app-amount-input>
         <app-amount-input label="Sales amount - Exclusive of all taxes and VAT" [value]="withoutTaxes()"></app-amount-input>
+        <app-date-location-input (requestUrl)="getTaxData($event)"></app-date-location-input>
       </div>
 
     </div>
@@ -77,7 +79,12 @@ export class TaxListComponent {
 
 
   constructor() {
-    this.http.get<Tax[]>('http://localhost:5203/api/Tax').subscribe({
+    this.getTaxData('http://localhost:5203/api/Tax');
+  }
+
+
+  getTaxData(requestUrl: string) {
+    this.http.get<Tax[]>(requestUrl).subscribe({
       next: (taxesList) => {
         if (taxesList.length > 0) {
           this.taxVAT.set(taxesList[0]); // Set VAT as first element
