@@ -10,7 +10,7 @@ import { Tax } from '../../../models/tax.model';
         {{ tax.title }}
       </span>
       <span class="text-lg font-bold flex-1">
-        {{ tax.rate * 100 }}%
+        {{ (tax.rate * 100).toFixed(2) }}%
       </span>
       <input
         type="text"

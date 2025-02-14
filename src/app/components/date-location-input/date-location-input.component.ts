@@ -70,7 +70,7 @@ export class DateLocationInputComponent {
   }
 
   submitForm() {
-    const url = `http://localhost:5203/api/Tax?date=${this.date()}&country=${this.selectedCountry()}&cityOrState=${this.selectedCityOrState()}`;
+    const url = `http://localhost:5203/api/Tax/filtered?date=${this.date()}&country=${this.selectedCountry()}&cityOrState=${this.selectedCityOrState()}`;
 
     console.log("Generated Request URL:", url);
 
